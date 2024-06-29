@@ -20,8 +20,6 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [me, setMe] = useState({});
 
-  console.log(cookie.token);
-
   useEffect(() => {
     if (cookie.token !== undefined) {
       fetch(URI + "/auth?token=" + cookie.token)

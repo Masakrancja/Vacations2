@@ -29,7 +29,7 @@ const Login = () => {
         if (response.status === "OK") {
           setMessage("");
           let expires = new Date();
-          expires.setTime(expires.getTime() + 60000);
+          expires.setTime(expires.getTime() + 600000);
           setCookie("token", response.response.tokenApi, {
             path: "/",
             expires,
