@@ -19,7 +19,11 @@ const SelectReasons = ({ reasonId, handleReasonIdChange }) => {
   const token = cookie.token;
 
   useEffect(() => {
-    fetch(URI + "/reasons?token=" + String(token))
+    const options = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    };
+    fetch(URI + "/reasons", options)
       .then((resposne) => resposne.json())
       .then((response) => {
         if (response.status === "OK") {

@@ -22,7 +22,11 @@ function App() {
 
   useEffect(() => {
     if (cookie.token !== undefined) {
-      fetch(URI + "/auth?token=" + cookie.token)
+      const options = {
+        method: "GET",
+        headers: { Authorization: "Bearer " + cookie.token },
+      };
+      fetch(URI + "/auth", options)
         .then((resposne) => resposne.json())
         .then((response) => {
           if (response.status === "OK") {

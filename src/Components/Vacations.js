@@ -13,8 +13,6 @@ const Vacations = ({ isAdmin, id, which }) => {
   const [reasons, setReasons] = useState([]);
   //const [message, setMessage] = useState("");
 
-  console.log("token_vacation: ", cookie.token);
-
   if (cookie.token === undefined) {
     window.location.reload();
     navigate("/login");
@@ -22,7 +20,11 @@ const Vacations = ({ isAdmin, id, which }) => {
 
   const token = cookie.token;
   useEffect(() => {
-    fetch(URI + "/events?token=" + token)
+    const options = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    };
+    fetch(URI + "/events", options)
       .then((resposne) => resposne.json())
       .then((response) => {
         if (response.status === "OK") {
@@ -34,7 +36,11 @@ const Vacations = ({ isAdmin, id, which }) => {
   }, [token]);
 
   useEffect(() => {
-    fetch(URI + "/reasons?token=" + token)
+    const options = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    };
+    fetch(URI + "/reasons", options)
       .then((resposne) => resposne.json())
       .then((response) => {
         if (response.status === "OK") {
@@ -44,9 +50,6 @@ const Vacations = ({ isAdmin, id, which }) => {
         }
       });
   }, [token]);
-
-  console.log(vacations);
-  console.log(reasons);
 
   return (
     <>

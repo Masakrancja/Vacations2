@@ -13,46 +13,50 @@ const AddVacationPage = () => {
   const navigate = useNavigate();
   if (cookie.token === undefined) {
     window.location.reload();
-    //navigate("/login");
   }
 
+  let date = new Date();
+  const datefrom =
+    date.getFullYear() +
+    "-" +
+    (date.getMonth() + 1 > 9
+      ? date.getMonth() + 1
+      : "0" + (date.getMonth() + 1)) +
+    "-" +
+    (date.getDate() > 9 ? date.getDate() : "0" + date.getDate());
+
+  date = new Date(date.getTime() + 24 * 60 * 60 * 1000);
+  const dateto =
+    date.getFullYear() +
+    "-" +
+    (date.getMonth() + 1 > 9
+      ? date.getMonth() + 1
+      : "0" + (date.getMonth() + 1)) +
+    "-" +
+    (date.getDate() > 9 ? date.getDate() : "0" + date.getDate());
+
   const [reasonId, setReasonId] = useState(0);
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+  const [dateFrom, setDateFrom] = useState(datefrom);
+  const [dateTo, setDateTo] = useState(dateto);
   const [notice, setNotice] = useState("");
 
   const [message, setMessage] = useState("");
   const [register, setRegister] = useState(false);
 
-  const event = {
-    reasonId: 0,
-    dateFrom: "",
-    dateTo: "",
-    notice: "",
-  };
-
   const handleReasonIdChange = (e) => {
-    const value = Number(e.target.value);
-    event.reasonId = value;
-    setReasonId(value);
+    setReasonId(e.target.value);
   };
 
   const handleDateFromChange = (e) => {
-    const value = e.target.value;
-    event.dateFrom = value;
-    setDateFrom(value);
+    setDateFrom(e.target.value);
   };
 
   const handleDateToChange = (e) => {
-    const value = e.target.value;
-    event.dateTo = value;
-    setDateTo(value);
+    setDateTo(e.target.value);
   };
 
   const handleNoticeChange = (e) => {
-    const value = e.target.value;
-    event.notice = value;
-    setNotice(e.value);
+    setNotice(e.e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -69,13 +73,13 @@ const AddVacationPage = () => {
     if (!hasError) {
       const options = {
         method: "POST",
-        body: JSON.stringify(event),
+        headers: { Authorization: "Bearer " + cookie.token },
+        body: JSON.stringify({ reasonId, dateFrom, dateTo, notice }),
       };
 
-      fetch(URI + "/events?token=" + cookie.token, options)
+      fetch(URI + "/events", options)
         .then((response) => response.json())
         .then((response) => {
-          console.log(response);
           if (response.status === "OK") {
             setRegister(true);
             setMessage("Urlop został utworzony");

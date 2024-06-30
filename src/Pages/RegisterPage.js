@@ -139,9 +139,6 @@ const RegisterPage = () => {
         method: "POST",
         body: JSON.stringify(newUser),
       };
-
-      console.log(options);
-
       fetch(URI + "/users", options)
         .then((response) => response.json())
         .then((response) => {
