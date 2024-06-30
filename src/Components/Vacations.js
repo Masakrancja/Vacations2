@@ -10,8 +10,8 @@ const Vacations = ({ isAdmin, id, which }) => {
   const [cookie] = useCookies(["token"]);
   const navigate = useNavigate();
   const [vacations, setVacations] = useState([]);
-  const [reasons, setReasons] = useState([]);
-  //const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   if (cookie.token === undefined) {
     window.location.reload();
@@ -29,30 +29,17 @@ const Vacations = ({ isAdmin, id, which }) => {
       .then((response) => {
         if (response.status === "OK") {
           setVacations(response.response);
+          setMessage("");
+          setIsError(false);
         } else {
-          //setMessage(response.message);
-        }
-      });
-  }, [token]);
-
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: { Authorization: "Bearer " + token },
-    };
-    fetch(URI + "/reasons", options)
-      .then((resposne) => resposne.json())
-      .then((response) => {
-        if (response.status === "OK") {
-          setReasons(response.response);
-        } else {
-          //setMessage(response.message);
+          setMessage(response.message);
+          setIsError(true);
         }
       });
   }, [token]);
 
   return (
-    <>
+    <div>
       {which === "all"
         ? vacations.map((item) => <Vacation key={item.id} item={item} />)
         : which === "pending"
@@ -68,7 +55,8 @@ const Vacations = ({ isAdmin, id, which }) => {
             .filter((item) => item.status === "cancelled")
             .map((item) => <Vacation key={item.id} item={item} />)
         : null}
-    </>
+      {isError ? <Error message={message} /> : null}
+    </div>
   );
 };
 export default Vacations;
